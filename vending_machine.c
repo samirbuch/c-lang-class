@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 
 int denominations[] = { 2000, 1000, 500, 100, 25, 10, 5, 1 };
 
@@ -25,7 +24,8 @@ int main(void) {
     int div = change / denomination;
     change = change % denomination;
 
-    printf("%i: %i. Remaining change: %.2f\n", denomination / 100, div, (float) change / 100);
+  //printf("%i: %i. Remaining change: %.2f\n", denomination / 100, div, (float) change / 100);
+    printf("%5.2f: %i. Remaining change: %.2f\n", denomination / 100.00, div, (float) change / 100);
 
     if(change == 0) {
       break;
