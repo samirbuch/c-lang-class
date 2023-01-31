@@ -15,13 +15,16 @@ void main(void) {
   // bills and coins used
   double cost,                                   // item cost, in dollars and cents
       paid;                                      // amount paid, in dollars and cents
-  change = (int)(((paid - cost) * 100.0) + 0.5); // converts change to pennies
+
   // Ask for cost
   printf("Enter amount cost ($): ");
   scanf("%lf", &cost);
   // Ask for amount paid
   printf("Enter amount tendered ($): ");
   scanf("%lf", &paid);
+
+  change = (int)(((paid - cost) * 100.0) + 0.5); // converts change to pennies
+
   // Calculations
   twenties = (change / TWENTY);
   change = (change % TWENTY);
