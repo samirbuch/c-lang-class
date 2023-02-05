@@ -35,7 +35,12 @@ int reimbursementCalculator(int miles) {
 
 // Coding Problem 2
 int farenheitToCelsius(int farenheit) {
-    return (farenheit - 32) * (5/9);
+    return (farenheit - 32) * (5.0 / 9.0);
+    // due to some int-y float-y screwy-ness, we need to do some float
+    // operations first before implicitly converting back to an int.
+    // grumble grumble type coersion grumble
+
+    // TODO: round this instead of flooring it
 }
 
 // Main function
@@ -64,6 +69,12 @@ int main(void) {
 
     printf("You traveled %i miles at a rate of $0.54 per mile. Your reimbursement is: $%i.\n\n", difference, reimbursement);
 
+    int farenheit;
+    printf("Enter temperature Fahrenheit: ");
+    scanf("%i", &farenheit);
+
+    int toCelsius = farenheitToCelsius(farenheit);
+    printf("%i degrees Fahrenheit is %i degrees Celsius\n", farenheit, toCelsius);
 }
 // End main function
 
