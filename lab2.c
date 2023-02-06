@@ -8,13 +8,13 @@
     Use floating point arithmetic and print values to two decimal places.
 
     1. Write code that calculates mileage reimbursement for a salesperson
-    at a rate of $0.54 per mile. Your program should get the mileage from
+    at a rate of $0.655 per mile. Your program should get the mileage from
     the user in this manner:
 
     MILEAGE REIMBURSEMENT CALCULATOR
     Enter beginning odometer reading: <user response>
     Enter ending odometer reading: <user response>
-    You traveled <value> miles. At $0.54 per mile, your reimbursement $<value>.
+    You traveled <value> miles. At $0.655 per mile, your reimbursement $<value>.
 
     2. Write code to convert a temperature in degrees Fahrenheit to
     degrees Celsius. The formula is C = (5/9)*(F - 32).  Your program should
@@ -27,20 +27,36 @@
 
 // Preprocessor directives
 #include <stdio.h>
+#include <math.h>
 
 // Coding Problem 1
 int reimbursementCalculator(int miles) {
-    return miles * 0.54;
+    int reimbursement = (int) round((float) miles * 0.655); // bam plus five points :) *
+    return reimbursement;
+
+    /* * this took me way too long to figure out. i knew about the round function,
+        but for some reason the linker couldn't find it? did a quick google search
+        and found out that I need to *tell* the linker to link it. it isn't linked
+        automatically via the include.
+        $ clang -lm lab2.c -o ./dist/lab2 && ./dist/lab2;
+        ---------^^
+        source: https://stackoverflow.com/a/39474681
+        source: https://stackoverflow.com/a/52030015
+
+        this led me to wonder if auto linking is a thing. looks like it is, but
+        it requires a #pragma directive, which is generally not portable by any
+        means. dependent on compiler, OS, etc. bad idea.
+
+        upon further investigation, i didn't need this round function. all i needed
+        to do was format it in the printf statement, and it would take care of 
+        rounding for me.
+        oh well! now i know how to link the math lib at least
+    */
 }
 
 // Coding Problem 2
-int farenheitToCelsius(int farenheit) {
-    return (farenheit - 32) * (5.0 / 9.0);
-    // due to some int-y float-y screwy-ness, we need to do some float
-    // operations first before implicitly converting back to an int.
-    // grumble grumble type coersion grumble
-
-    // TODO: round this instead of flooring it
+float farenheitToCelsius(float farenheit) {
+    return (farenheit - 32.0) * (5.0 / 9.0);
 }
 
 // Main function
@@ -60,21 +76,28 @@ int main(void) {
     }
 
     int difference = endingOdometer - beginningOdometer;
-    if(difference <= 0) {
-        printf("You didn't go anywhere. Try again.\n");
-        return 1;
-    }
-
     int reimbursement = reimbursementCalculator(difference);
 
-    printf("You traveled %i miles at a rate of $0.54 per mile. Your reimbursement is: $%i.\n\n", difference, reimbursement);
+    printf("You traveled %i miles at a rate of $0.655 per mile. Your reimbursement is: $%i.\n\n", difference, reimbursement);
 
-    int farenheit;
+    float farenheit;
     printf("Enter temperature Fahrenheit: ");
-    scanf("%i", &farenheit);
+    scanf("%f", &farenheit);
 
-    int toCelsius = farenheitToCelsius(farenheit);
-    printf("%i degrees Fahrenheit is %i degrees Celsius\n", farenheit, toCelsius);
+    /*
+        this actually led me to wonder how scanf formats things. i learned that
+        it can accept a whole lot more variation than just the type of variable
+        you're inputting- length of input, modifier of the type, etc.
+
+        also learned about possible security implications.
+
+        i hope to god i never have to do any serious programming in C.
+
+        source: https://www.tutorialspoint.com/c_standard_library/c_function_scanf.htm#
+    */
+
+    float toCelsius = farenheitToCelsius(farenheit);
+    printf("%.2f degrees Fahrenheit is %.2f degrees Celsius\n", farenheit, toCelsius);
 }
 // End main function
 
