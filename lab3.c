@@ -44,7 +44,11 @@ int main(void)
         scanf("%i", &num);
 
         float factorial = gospersFactorial(num);
-        printf("Gosper\'s approximate factorial: %f\n", factorial);
+        printf("Gosper\'s approximate factorial: %.5f\n", factorial);
+    }
+
+    if(doLoanPayment == 0 && doFactorial == 0) {
+        printf("Program is not going to do anything. Try setting doLoanPayment and/or doFactorial to `1`.\n");
     }
 
     return 0;
