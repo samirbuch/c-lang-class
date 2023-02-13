@@ -1,4 +1,4 @@
 # C Lang Class
 Hello Dr. Crotty :)
 
-Currently working on [lab2.c](/lab2.c).
+Currently working on [lab3.c](/lab3.c).
