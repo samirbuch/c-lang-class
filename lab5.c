@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int isDivisibleByNine(int num);
+float estimatePi(int numIterations);
 
 int main(void) {
     int num;
@@ -14,17 +15,37 @@ int main(void) {
     } else {
         printf("%i IS NOT divisible by 9.\n", num);
     }
+
+    int numIterations;
+    printf("ESTIMATE PI\n");
+    printf("Enter number of iterations: ");
+    scanf("%i", &numIterations);
+
+    float estimatedPi = estimatePi(numIterations);
+    printf("Estimated PI is %.6f\n", estimatedPi);
+}
+
+float estimatePi(int numIterations) {
+    float sum = 0.0;
+
+    int isEven = 1;
+    for(int i = 1; i < numIterations * 2 + 1; i += 2) {
+        if(isEven == 1) {
+            sum += 1.0 / (float) i;
+            isEven = 0;
+        } else {
+            sum += -1.0 * (1.0 / (float) i);
+            isEven = 1;
+        }
+
+    }
+
+    return sum * 4;
 }
 
 int isDivisibleByNine(int num) {
     int sum = 0;
 
-    /*********************
-     * ================= *
-     * THIS BREAKS CLION *
-     * ================= *
-     ********************/
-     // NORMAL TERMINAL WORKS FINE!
     while(num != 0) {
         // get the right-most digit and add it to the sum
         int rightMost = num % 10;
