@@ -43,7 +43,7 @@ float estimatePi(int numIterations) {
     return sum * 4;
 }
 
-int isDivisibleByNine(int num) {
+int isDivisibleByNine(int num) { // because num % 9 wasn't enough
     int sum = 0;
 
     while(num != 0) {
