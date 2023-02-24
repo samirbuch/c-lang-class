@@ -28,16 +28,13 @@ int main(void) {
 float estimatePi(int numIterations) {
     float sum = 0.0;
 
-    int isEven = 1;
-    for(int i = 1; i < numIterations * 2 + 1; i += 2) {
-        if(isEven == 1) {
-            sum += 1.0 / (float) i;
-            isEven = 0;
-        } else {
-            sum += -1.0 * (1.0 / (float) i);
-            isEven = 1;
-        }
+    int denom = 1;
+    float sign = 1.0;
 
+    while(denom <= numIterations) {
+        sum += sign/denom;
+        sign *= -1;
+        denom += 2;
     }
 
     return sum * 4;
