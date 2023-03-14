@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-// Template a structure to organize data
-// Source: https://stackoverflow.com/a/9653083/8916706
+// https://stackoverflow.com/a/9653083/8916706
+// Result of a quadratic equation computation
 struct quadraticResult
 {
   int isComplex; // 0 = not complex, 1 = complex
@@ -44,7 +44,7 @@ int main(void)
 
     if (smallestNum == 0)
     {
-      smallestNum = num; // first time check. no biggie
+      smallestNum = num; // first-time-run check.
     }
 
     if (num > largestNum)
@@ -63,25 +63,38 @@ int main(void)
     printf("Current values:\n\t* Highest Number: %i\n\t* Lowest Number: %i\n\t* Average: %0.3f\n\n", largestNum, smallestNum, avg);
   }
 
-  int a, b, c;
-  printf("Solving a quadratic equation: ax² ± bx ± c\n");
-  printf("Input a: ");
-  scanf("%i", &a);
-  printf("Input b: ");
-  scanf("%i", &b);
-  printf("Input c: ");
-  scanf("%i", &c);
-  // this would be a lot easier if C supported regex natively. 🙄
+  while (1)
+  {
+    int a, b, c;
+    printf("Solving a quadratic equation: ax² ± bx ± c\n");
+    printf("Input a: ");
+    scanf("%i", &a);
+    printf("Input b: ");
+    scanf("%i", &b);
+    printf("Input c: ");
+    scanf("%i", &c);
+    // this would be a lot easier if C supported regex natively. 🙄
 
-  struct quadraticResult result = factorPolynomial(a, b, c);
-  if (result.isComplex == 1)
-  {
-    printf("Result:\n* x1 = %.5f + %.5fi\n* x2 = %.5f - %.5fi\n",
-           result.x1, result.complexPortion, result.x2, result.complexPortion);
-  }
-  else
-  {
-    printf("Result:\n* x1 = %.5f\n* x2 = %.5f\n", result.x1, result.x2);
+    struct quadraticResult result = factorPolynomial(a, b, c);
+    if (result.isComplex == 1)
+    {
+      printf("Result:\n* x1 = %.5f + %.5fi\n* x2 = %.5f - %.5fi\n",
+             result.x1, result.complexPortion, result.x2, result.complexPortion);
+    }
+    else
+    {
+      printf("Result:\n* x1 = %.5f\n* x2 = %.5f\n", result.x1, result.x2);
+    }
+
+    int yesOrNo;
+    printf("Would you like to solve another equation? [1/0] ");
+    scanf("%i", &yesOrNo);
+    if(yesOrNo == 1) {
+      continue;
+    } else if (yesOrNo == 0) {
+      printf("Exiting...\n");
+      break;
+    }
   }
 
   return 0;
@@ -104,7 +117,7 @@ struct quadraticResult factorPolynomial(int a, int b, int c)
 
     double complexPortion = sqrt(discriminant) / (2 * a);
 
-    x1 = (-1 * (double) b) / (2 * (double) a);
+    x1 = (-1 * (double)b) / (2 * (double)a); // coersion fuckery
     x2 = x1;
 
     struct quadraticResult result = {isComplex, x1, x2, complexPortion};
@@ -112,6 +125,10 @@ struct quadraticResult factorPolynomial(int a, int b, int c)
   }
   else
   {
+    // I tried to separate them out into their own fractions,
+    // but for whatever reason the math was not mathing. So I choose
+    // to do this instead. In my head, this is actually easier to
+    // track.
     int posNumerator = (-1 * b) + sqrt(discriminant);
     int negNumerator = (-1 * b) - sqrt(discriminant);
 
