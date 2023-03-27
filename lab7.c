@@ -30,9 +30,7 @@ int main(void)
     return 1;
   }
 
-//  printf("Contents of file:\n");
-
-  do
+  while(1)  // always loop! we'll add a break in the loop.
   {
     ch = fgetc(ptr); // REF: [2]
 
@@ -50,22 +48,19 @@ int main(void)
       printf("* Batting Average: %.3f\n", (float) hits / (float) atBats);
 
       if(ch == EOF) {
-//          fclose(ptr);
           break; // STOP THE COUNT
       }
 
       // Clear the playerNumber data. We're reading a new player.
       playerNumber[0] = 0;
       playerNumber[1] = 0;
-//      printf("newline\n");
 
       continue;
     }
 
-//    printf("%c\n", ch);
     if (isNumber(ch) == 1)
     {
-      if (playerNumber[1] != 0) // FIXME: index of an array is not a pointer..???
+      if (playerNumber[1] != 0)
       {
         playerNumber[0] = playerNumber[1];
         playerNumber[1] = atoi(&ch); // REF: [0]
@@ -101,8 +96,7 @@ int main(void)
         }
     }
 
-    // always loop! we'll add a break in the loop.
-  } while (1);
+  }
 
   // C has so many globals.. i'm not used to it.
   // "stderr", "EOF", in most other languages, these are all things
@@ -117,7 +111,8 @@ int main(void)
 // literally just googled an ASCII table to see what the values of 0-9 are.
 int isNumber(char c)
 {
-  return c >= 48 && c <= 57
+    // if the int value of c is between 48 ("0") and 57 ("9"), return true.
+    return c >= 48 && c <= 57
              ? 1
              : 0;
   // ✨ ternary operators ✨
