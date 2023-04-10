@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
   FILE *examData;
@@ -54,8 +55,13 @@ int main(void) {
   while (1) {
     int studentID;
     // scan in the user id
-    fscanf(examData, "%d", &studentID);
-    printf("studentID: %i\n", studentID);
+    int res = fscanf(examData, "%d", &studentID);
+    if(res == 0) {
+      fprintf(stderr, "Malformed examdata.txt file. Missing student ID.");
+      exit(-1);
+      // panic. don't continue.
+    }
+    printf("studentID: %i | res: %i\n", studentID, res);
     // scan in the space
     fscanf(examData, "%c", &_space);
     // scan the user's answers into the userAnswers array
