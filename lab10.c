@@ -70,7 +70,7 @@ double evaluatePolynomial(const int *degree, const int *polynomialArray, const i
   // High to low, again, since polynomialArray has the highest coefficient at its lowest index.
   for(int power = *degree; power > 0; power--) {
     int coefficient = polynomialArray[abs(power - *degree)];
-    result *= (double) coefficient * pow(*x, power);
+    result += (double) coefficient * pow(*x, power);
   }
 
   result += (double) *constant;
