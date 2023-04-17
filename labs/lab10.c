@@ -1,5 +1,5 @@
 // REFERENCES
-// [1]: https://stackoverflow.com/a/10349610/8916706
+// [1]: https://en.wikipedia.org/wiki/C_dynamic_memory_allocation#Overview_of_functions
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,16 +30,25 @@ int mainLoop(void) {
   }
 
   // The array of equation coefficients, from highest degree to lowest.
-  int polynomialArray[degree];
+  //int polynomialArray[degree];
+  int *polynomialArray = calloc(degree, sizeof(int)); // REF: [1]
   // When you create an array, C (under the hood) creates a pointer to the first element in the array.
   // So every time you get/set an array value, it just takes the pointer and adds x (arr[x]).
+
+  if(polynomialArray == NULL) {
+    fprintf(stderr, "Failed to allocate and initialize memory of length %i\n", degree);
+    exit(1);
+  }
+
+  // Now, I use `calloc` here instead of just creating a new array with size of `degree` because
+  // the C compiler cannot possibly know what the actual size of `degree` could be, until runtime.
+  // Technically, I can still do `polynomialArray[degree]` because C actually doesn't care what the
+  // real size of arrays are-- it'll just keep writing to the next pointer's location-- but if you
+  // do that, it's a security hazard. Buffer overflows and such. Not worth it, just use `calloc`.
 
   // Constant at the end of the polynomial
   int constant;
 
-  // The function prototype specifies type int* for the polynomialArray, but we don't have to
-  // put the & symbol here to indicate the address of because `polynomialArray` is already
-  // technically a pointer ;)
   getPolynomial(&degree, polynomialArray, &constant);
 
   int x;
@@ -48,6 +57,10 @@ int mainLoop(void) {
 
   double result = evaluatePolynomial(&degree, polynomialArray, &constant, &x);
   printf("Your evaluated polynomial: %.1f\n", result);
+
+  // Technically since this is the end of the program, it's gonna be freed anyway when it exits.
+  // Still, it's good practice to free now-unused memory :)
+  free(polynomialArray);
 
   return 0;
 }
