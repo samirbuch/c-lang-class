@@ -5,10 +5,21 @@
 #include <stdlib.h>
 #include <math.h>
 
+int mainLoop(void);
 void getPolynomial(const int *degree, int *polynomialArray, int *constant);
 double evaluatePolynomial(const int *degree, const int *polynomialArray, const int *constant, const int *x);
 
 int main(void) {
+  int sentinel = 1;
+  while(sentinel == 1) {
+    mainLoop();
+
+    printf("Would you like to evaluate another polynomial?\n(1/0) > ");
+    scanf("%i", &sentinel);
+  }
+}
+
+int mainLoop(void) {
   int degree;
   printf("What is the degree of this polynomial?\n(What's the highest exponent?)\n> ");
   scanf("%i", &degree);
@@ -38,6 +49,7 @@ int main(void) {
   double result = evaluatePolynomial(&degree, polynomialArray, &constant, &x);
   printf("Your evaluated polynomial: %.1f\n", result);
 
+  return 0;
 }
 
 void getPolynomial(const int *degree, int *polynomialArray, int *constant) {
