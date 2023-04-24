@@ -9,14 +9,17 @@ int main(void) {
     char testStr[] = "cat";
 
     printf("Source string: %s\n", srcStr);
-    printf("Test   string: %s\n", testStr);
+    printf("Test string:   %s\n", testStr);
 
     int index = findInString(srcStr, testStr);
-    printf("%i\n", index);
+    if(index == -1) {
+        printf("The test string did not occur in the source string.\n");
+        return 0;
+    }
+    printf("The test string occurred in the source string at index %i (character %i)\n", index, index + 1);
 }
 
 int findInString(char *src, char *testStr) {
-    int idx = 0;
     char firstCharInTest = testStr[0];
 
     size_t srclen = strlen(src);
@@ -28,13 +31,12 @@ int findInString(char *src, char *testStr) {
         }
         for(int j = 0; j < testlen; j++) {
             if(j == testlen - 1 && src[i + j] == testStr[j]) {
-                idx = i;
-                return idx;
+                return i;
             }
         }
     }
 
-    return idx;
+    return -1;
 }
 
 // need to refactor this into a util header file available across all of lab11
