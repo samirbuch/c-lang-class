@@ -7,12 +7,15 @@ int findOneInString(char *src, char *testStr);
 
 int *findAllInString(char *src, char *testStr);
 
+void replace(char *src, char *testStr, char *replaceWith);
+
 void replaceAll(char *src, char *testStr, char *replaceWith);
 
 int main(void) {
     char srcStr[] = "concatenate";
     char testStr[] = "cat";
 
+    printf("Finding index of test string in source string\n");
     printf("Source string: %s\n", srcStr);
     printf("Test string:   %s\n", testStr);
 
@@ -21,8 +24,17 @@ int main(void) {
         printf("The test string did not occur in the source string.\n");
         return 0;
     }
-    printf("The test string occurred in the source string at index %i (character %i)\n", index, index + 1);
+    printf("The test string occurred in the source string at index %i (character %i)\n\n", index, index + 1);
 
+    char replaceWith[] = "dog";
+    printf("Replacing test string with replaceWith string in source string\n");
+    printf("Source string: %s\n", srcStr);
+    printf("Test string:   %s\n", testStr);
+    printf("Replace with:  %s\n", replaceWith);
+    replace(srcStr, testStr, replaceWith);
+    printf("New string: %s\n\n", srcStr);
+
+    printf("Replacing all instances of test string in source string with replace string\n");
     char srcMultStr[] = "catcatcarcat";
     printf("Source string: %s\n", srcMultStr);
     printf("Test string:   %s\n", testStr);
@@ -108,6 +120,20 @@ int *findAllInString(char *src, char *testStr) {
     // (check for -1, reallocarray).
 
     return positions;
+}
+
+/**
+ * Destructively replaces first occurrence of replaceWith in src
+ * @param src Source string
+ * @param testStr String to find in src
+ * @param replaceWith String to replace first occurrence of testStr in src
+ */
+void replace(char *src, char *testStr, char *replaceWith) {
+    int foundIndex = findOneInString(src, testStr);
+
+    for (int i = 0; i < strlen(replaceWith); i++) {
+        src[foundIndex + i] = replaceWith[i];
+    }
 }
 
 /**
