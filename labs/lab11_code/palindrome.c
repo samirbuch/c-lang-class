@@ -5,31 +5,49 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <math.h>
 
 // Following in C's naming convention lol
-void parsenstr(const char string[], size_t n, char *out);
+char* parsenstr(const char string[], size_t n);
+int isPalindrome(const char *string, size_t n);
 
 int main(void) {
 
-    char str[] = "Is This A Palindrome?";
-    if(strlen(str) > 80) {
-        fprintf(stderr, "String must not be longer than 80 characters.\n");
-        exit(1);
-    }
+    char s1[] = "Is This A Palindrome?";
+    char *p_parsedS1 = parsenstr(s1, strlen(s1));
+    printf("Parsed s1: %s\n", p_parsedS1);
 
-    char *p = calloc(strlen(str), sizeof(char));
-    parsenstr(str, strlen(str), p);
+    int isS1Palindrome = isPalindrome(p_parsedS1, strlen(p_parsedS1));
+    printf("Is s1 a palindrome? %i\n", isS1Palindrome);
 
-    printf("parsed string: %s\n", p);
+    free(p_parsedS1);
 
-    free(p);
+    char s2[] = "hannah";
+    char *p_parsedS2 = parsenstr(s2, strlen(s2));
+    printf("Parsed s2: %s\n", p_parsedS2);
+
+    int isS2Palindrome = isPalindrome(p_parsedS2, strlen(p_parsedS2));
+    printf("Is s2 a palindrome? %i\n", isS2Palindrome);
+
+    free(p_parsedS2);
 
     return 0;
 }
 
 // "char *" is a string
 // (more accurately: a pointer to the first character in a character array)
-void parsenstr(const char string[], size_t n, char *out) {
+char* parsenstr(const char string[], size_t n) {
+    if(strlen(string) > 80) {
+        fprintf(stderr, "String must not be longer than 80 characters.\n");
+        exit(1);
+    }
+
+    char *out = calloc(n, sizeof(char));
+    if(out == NULL) {
+        fprintf(stderr, "Failed to allocate and initialize memory of size %lu\n", n * sizeof(char));
+        exit(1);
+    }
+
     int idx = 0;
     for(int i = 0; i < (int) n; i++) {
         char c = toupper(string[i]);
@@ -37,8 +55,21 @@ void parsenstr(const char string[], size_t n, char *out) {
             out[idx++] = c;
         } // REF: [1]
     }
+
+    out = reallocarray(out, idx + 1, sizeof(char));
+
+    return out;
 }
 
-int isPalidrome(char string[]) {
+int isPalindrome(const char *string, size_t n) {
+    for(int i = 0; i < ceil(n / 2); i++) {
+        char firstChar = string[i];
+        char lastChar = string[n - 1 - i];
 
+        if(firstChar != lastChar) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
