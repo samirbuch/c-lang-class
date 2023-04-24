@@ -2,10 +2,12 @@
 // [1]: https://www.gaijin.at/en/infos/ascii-ansi-character-table
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+
+// grumble grumble forgot we can't use string.h
+size_t strlen(const char *str);
 
 // Following in C's naming convention lol
 char* parsenstr(const char string[], size_t n);
@@ -22,7 +24,7 @@ int main(void) {
 
     free(p_parsedS1);
 
-    char s2[] = "hannah";
+    char s2[] = "racecar"; // odd-length palindrome
     char *p_parsedS2 = parsenstr(s2, strlen(s2));
     printf("Parsed s2: %s\n", p_parsedS2);
 
@@ -31,7 +33,25 @@ int main(void) {
 
     free(p_parsedS2);
 
+    char s3[] = "hannah"; // even-length palindrome
+    char *p_parsedS3 = parsenstr(s3, strlen(s3));
+    printf("Parsed s3: %s\n", p_parsedS3);
+
+    int isS3Palindrome = isPalindrome(p_parsedS3, strlen(p_parsedS3));
+    printf("Is s3 a palindrome? %i\n", isS3Palindrome);
+
+    free(p_parsedS3);
+
     return 0;
+}
+
+size_t strlen(const char *str) {
+    size_t length = 0;
+    while(str[length] != '\0') {
+        length++;
+    }
+
+    return length;
 }
 
 // "char *" is a string
@@ -42,6 +62,8 @@ char* parsenstr(const char string[], size_t n) {
         exit(1);
     }
 
+    // Initially create an array of size n in case all the input string
+    // is a palindrome...
     char *out = calloc(n, sizeof(char));
     if(out == NULL) {
         fprintf(stderr, "Failed to allocate and initialize memory of size %lu\n", n * sizeof(char));
@@ -56,6 +78,7 @@ char* parsenstr(const char string[], size_t n) {
         } // REF: [1]
     }
 
+    // ... then shrink it down to the size of the valid characters.
     out = reallocarray(out, idx + 1, sizeof(char));
 
     return out;
