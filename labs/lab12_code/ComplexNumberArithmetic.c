@@ -4,11 +4,15 @@
  */
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 /*  User-defined complex number type */
 typedef struct {
-    double real, imaginary;
+    double real;
+    double imaginary;
 } complex_t;
+
+int driver(void);
 
 int scan_complex(complex_t *c);
 
@@ -24,8 +28,22 @@ complex_t divide_complex(complex_t c1, complex_t c2);
 
 complex_t abs_complex(complex_t c);
 
-/* Driver                                                               */
+complex_t complex_conjugate(complex_t c);
+
 int main(void) {
+    char c[2] = "y";
+    while (strncmp(c, "y", strlen("y")) == 0) {
+        driver();
+
+        printf("\nWould you like to compute another?\n(y/n) > ");
+        // this is unsafe and i literally do not care
+        fscanf(stdin, "%s", &c);
+    }
+    printf("Exiting...\n");
+}
+
+/* Driver                                                               */
+int driver(void) {
     complex_t com1, com2;
 
     /* Gets two complex numbers                                       */
@@ -35,46 +53,64 @@ int main(void) {
     printf("Enter a second complex number > ");
     scan_complex(&com2);
 
-    /* Forms and displays the sum                                     */
-    printf("\n");
-    print_complex(com1);
-    printf(" + ");
-    print_complex(com2);
-    printf(" = ");
-    print_complex(add_complex(com1, com2));
+    char choice[2];
+    printf("Menu:\n\n");
+    printf("a. add the numbers\n");
+    printf("s. subtract the numbers\n");
+    printf("m. multiply the numbers\n");
+    printf("d. divide the numbers\n");
+    printf("v. get the absolute value\n");
+    printf("c. get the complex conjugate\n\n");
+    printf("(a/s/m/d/v/c) > ");
+    fscanf(stdin, "%s", &choice);
 
-    /* Forms and displays the difference                              */
-    printf("\n\n");
-    print_complex(com1);
-    printf(" - ");
-    print_complex(com2);
-    printf(" = ");
-    print_complex(subtract_complex(com1, com2));
-
-    /* Forms and displays the product                              */
-    printf("\n\n");
-    print_complex(com1);
-    printf(" * ");
-    print_complex(com2);
-    printf(" = ");
-    print_complex(multiply_complex(com1, com2));
-
-
-    /* Forms and displays the quotient                              */
-    printf("\n\n");
-    print_complex(com1);
-    printf(" / ");
-    print_complex(com2);
-    printf(" = ");
-    print_complex(divide_complex(com1, com2));
-
-
-    /* Forms and displays the absolute value of the first number      */
-    printf("\n\n|");
-    print_complex(com1);
-    printf("| = ");
-    print_complex(abs_complex(com1));
-    printf("\n");
+    size_t len = strlen("a");
+    if (strncmp(choice, "a", len) == 0) {
+        /* Forms and displays the sum                                     */
+        printf("\n");
+        print_complex(com1);
+        printf(" + ");
+        print_complex(com2);
+        printf(" = ");
+        print_complex(add_complex(com1, com2));
+    } else if (strncmp(choice, "s", len) == 0) {
+        /* Forms and displays the difference                              */
+        printf("\n\n");
+        print_complex(com1);
+        printf(" - ");
+        print_complex(com2);
+        printf(" = ");
+        print_complex(subtract_complex(com1, com2));
+    } else if (strncmp(choice, "m", len) == 0) {
+        /* Forms and displays the product                              */
+        printf("\n\n");
+        print_complex(com1);
+        printf(" * ");
+        print_complex(com2);
+        printf(" = ");
+        print_complex(multiply_complex(com1, com2));
+    } else if (strncmp(choice, "d", len) == 0) {
+        /* Forms and displays the quotient                              */
+        printf("\n\n");
+        print_complex(com1);
+        printf(" / ");
+        print_complex(com2);
+        printf(" = ");
+        print_complex(divide_complex(com1, com2));
+    } else if (strncmp(choice, "v", len) == 0) {
+        /* Forms and displays the absolute value of the first number      */
+        printf("\n\n|");
+        print_complex(com1);
+        printf("| = ");
+        print_complex(abs_complex(com1));
+    } else if (strncmp(choice, "c", len) == 0) {
+        /* Forms and displays the complex conjugate */
+        printf("\n\n");
+        print_complex(com1);
+        printf(" -> ");
+        print_complex(complex_conjugate(com1));
+        printf("\n");
+    }
 
     return (0);
 }
@@ -179,6 +215,13 @@ complex_t divide_complex(complex_t c1, complex_t c2) /* input parameters     */
     //compute numerator of quotient
 
     denom = c2_conjugate.real * c2_conjugate.real + c2_conjugate.imaginary * c2_conjugate.imaginary;
+    if (denom == 0.0) {
+        fprintf(stderr, "Denominator was zero.\n");
+        cquot.real = 0;
+        cquot.imaginary = 0;
+        return cquot;
+    }
+
     cquot.real = (c1.real * c2.real + c1.imaginary * c2.imaginary) / denom;
     cquot.imaginary = (c1.real * c2.imaginary - c2.real * c1.imaginary) / denom;
     //printf("Function divide_complex returning c1/c2\n")
@@ -196,6 +239,14 @@ complex_t abs_complex(complex_t c) /* input parameter                        */
     cabs.imaginary = 0;
 
     return (cabs);
+}
+
+complex_t complex_conjugate(complex_t c) {
+    complex_t ccjg;
+
+    ccjg.real = c.real;
+    ccjg.imaginary = c.imaginary * -1;
+    return ccjg;
 }
 
 /*
