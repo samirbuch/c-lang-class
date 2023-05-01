@@ -25,6 +25,7 @@ complex_t subtract_complex(complex_t c1, complex_t c2);
 complex_t multiply_complex(complex_t c1, complex_t c2);
 
 complex_t divide_complex(complex_t c1, complex_t c2);
+complex_t divide_complex_a(complex_t c1, complex_t c2);
 
 complex_t abs_complex(complex_t c);
 
@@ -97,6 +98,8 @@ int driver(void) {
         print_complex(com2);
         printf(" = ");
         print_complex(divide_complex(com1, com2));
+        printf("\nmy function:\n");
+        print_complex(divide_complex_a(com1, com2));
     } else if (strncmp(choice, "v", len) == 0) {
         /* Forms and displays the absolute value of the first number      */
         printf("\n\n|");
@@ -224,6 +227,24 @@ complex_t divide_complex(complex_t c1, complex_t c2) /* input parameters     */
 
     cquot.real = (c1.real * c2.real + c1.imaginary * c2.imaginary) / denom;
     cquot.imaginary = (c1.real * c2.imaginary - c2.real * c1.imaginary) / denom;
+    //printf("Function divide_complex returning c1/c2\n")
+    return (cquot);
+}
+
+complex_t divide_complex_a(complex_t c1, complex_t c2) {
+    complex_t cquot;
+
+    complex_t c2_conjugate = complex_conjugate(c2);
+    double denominator = multiply_complex(c2, c2_conjugate).real;
+
+    complex_t numerator = multiply_complex(c1, c2_conjugate);
+
+    double real = numerator.real / denominator;
+    double imaginary = numerator.imaginary / denominator;
+
+    cquot.real = real;
+    cquot.imaginary = imaginary;
+
     //printf("Function divide_complex returning c1/c2\n")
     return (cquot);
 }
